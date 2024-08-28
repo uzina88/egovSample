@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="StudentMngDAO">
+	
+	<select id="selectStudentMngList" resultType="java.util.HashMap">
+		SELECT  
+				CAST((@rownum:=@rownum+1) AS unsigned integer) AS rnum,
+				A.student_id AS studentId,
+				A.student_name AS studentName,
+			    if(A.student_graduate_yn = 'Y', '졸업생', '재학생') AS studentGraduateYn,
+				B.school_name AS schoolName
+		FROM tb_student_info A
+		LEFT JOIN tb_school_info B
+		ON A.school_id = B.school_id
+		JOIN (SELECT @rownum:=0 FROM dual) R
+		order by rnum desc
+	</select>
+	
+	<select id="selectStudentInfo" parameterType="int" resultType="java.util.HashMap">
+		SELECT  
+				student.student_Id AS studentId,
+				student.student_name AS studentName,
+		        school.school_name AS schoolName,
+				if(student.student_graduate_yn = 'Y', '졸업생', '재학생') AS studentGraduateYn
+		FROM tb_student_info student
+		LEFT JOIN tb_school_info school
+		ON student.school_id = school.school_id
+		WHERE student_Id = #{studentId}
+	</select> 
+	
+	<insert id="insertMngSchoolInfoPage" parameterType="java.util.HashMap">
+		INSERT INTO tb_student_info(
+			student_name,
+			school_id,
+			student_graduate_yn
+		) VALUES (
+			#{studentName},
+			#{schoolId},
+		    #{studentGraduateYn}
+		)
+	</insert> 
+
+</mapper>
