@@ -57,7 +57,7 @@
 			<tr>
 				<th>학생이름</th>
 				<td>
-					<input type="text" id="studentName" name="studentName" value="}"/>
+					<input type="text" id="studentName" name="studentName" value=""/>
 				</td>
 			</tr>
 			<tr>
